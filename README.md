@@ -1,13 +1,3 @@
----
-title: StudentAI Platform
-emoji: 🤖
-colorFrom: blue
-colorTo: purple
-sdk: docker
-app_file: Dockerfile
-pinned: false
----
-# StudentAI Platform — Agentic Database System
 
 Full-stack agentic AI platform for student database management.
 Natural language → FastAPI → SQLite → Claude → UI.
