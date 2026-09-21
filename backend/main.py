@@ -14,20 +14,36 @@ from dotenv import load_dotenv
 import json
 import re
 
-from database import engine, get_db, Base
-from models import Student, Course, Enrollment
-from schemas import (
-    StudentCreate, StudentUpdate, StudentResponse,
-    CourseResponse, EnrollmentResponse, AgentRequest, AgentResponse,
-)
-from seed import seed_database
-import crud
+try:
+    from backend.database import engine, get_db, Base
+    from backend.models import Student, Course, Enrollment
+    from backend.schemas import (
+        StudentCreate, StudentUpdate, StudentResponse,
+        CourseResponse, EnrollmentResponse, AgentRequest, AgentResponse,
+    )
+    from backend import crud
+    from backend.seed import seed_database
+except ImportError:
+    from database import engine, get_db, Base
+    from models import Student, Course, Enrollment
+    from schemas import (
+        StudentCreate, StudentUpdate, StudentResponse,
+        CourseResponse, EnrollmentResponse, AgentRequest, AgentResponse,
+    )
+    import crud
+    from seed import seed_database
 
 # ── Voice module (browser voice chat: STT / RAG / Gemini / TTS) ───────────────
-from voice.database import init_db as voice_init_db
-from voice.router import router as voice_router
-from voice.services.rag.retriever import ingest_folder as voice_ingest_folder, warmup as voice_rag_warmup
-from voice.services.stt.transcriber import warmup as voice_stt_warmup
+try:
+    from backend.voice.database import init_db as voice_init_db
+    from backend.voice.router import router as voice_router
+    from backend.voice.services.rag.retriever import ingest_folder as voice_ingest_folder, warmup as voice_rag_warmup
+    from backend.voice.services.stt.transcriber import warmup as voice_stt_warmup
+except ImportError:
+    from voice.database import init_db as voice_init_db
+    from voice.router import router as voice_router
+    from voice.services.rag.retriever import ingest_folder as voice_ingest_folder, warmup as voice_rag_warmup
+    from voice.services.stt.transcriber import warmup as voice_stt_warmup
 
 load_dotenv()
 

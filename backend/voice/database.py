@@ -10,7 +10,10 @@ have to share a session or a Base.metadata.
 import os
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 
-from voice.models import Base
+try:
+    from backend.voice.models import Base
+except ImportError:
+    from voice.models import Base
 
 DB_URL = os.getenv("VOICE_DATABASE_URL", "sqlite+aiosqlite:///./voice.db")
 

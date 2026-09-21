@@ -17,7 +17,10 @@ from typing import AsyncGenerator, Optional
 
 import edge_tts
 
-from voice.services.stt.language_detector import get_tts_voice
+try:
+    from backend.voice.services.stt.language_detector import get_tts_voice
+except ImportError:
+    from voice.services.stt.language_detector import get_tts_voice
 
 TTS_RATE = os.getenv("TTS_RATE", "+12%")
 

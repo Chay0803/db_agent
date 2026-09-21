@@ -8,7 +8,10 @@ from sqlalchemy import select, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from voice.models import Conversation, Message, Document, Language
+try:
+    from backend.voice.models import Conversation, Message, Document, Language
+except ImportError:
+    from voice.models import Conversation, Message, Document, Language
 
 
 async def get_conversation(db: AsyncSession, session_id: str) -> Optional[Conversation]:

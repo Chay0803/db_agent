@@ -25,16 +25,28 @@ from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from fastapi.responses import StreamingResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from voice import crud
-from voice.database import get_db
-from voice.security import rate_limit, require_admin
-from voice.session import registry
-from voice.services.emotion.detector import detect_emotion_sync
-from voice.services.llm.gemini import get_full_response
-from voice.services.rag.retriever import add_document, get_context_text, search, status as rag_status
-from voice.services.stt.language_detector import detect_language_sync
-from voice.services.stt.transcriber import transcribe_audio
-from voice.services.tts.synthesizer import synthesize_full
+try:
+    from backend.voice import crud
+    from backend.voice.database import get_db
+    from backend.voice.security import rate_limit, require_admin
+    from backend.voice.session import registry
+    from backend.voice.services.emotion.detector import detect_emotion_sync
+    from backend.voice.services.llm.gemini import get_full_response
+    from backend.voice.services.rag.retriever import add_document, get_context_text, search, status as rag_status
+    from backend.voice.services.stt.language_detector import detect_language_sync
+    from backend.voice.services.stt.transcriber import transcribe_audio
+    from backend.voice.services.tts.synthesizer import synthesize_full
+except ImportError:
+    from voice import crud
+    from voice.database import get_db
+    from voice.security import rate_limit, require_admin
+    from voice.session import registry
+    from voice.services.emotion.detector import detect_emotion_sync
+    from voice.services.llm.gemini import get_full_response
+    from voice.services.rag.retriever import add_document, get_context_text, search, status as rag_status
+    from voice.services.stt.language_detector import detect_language_sync
+    from voice.services.stt.transcriber import transcribe_audio
+    from voice.services.tts.synthesizer import synthesize_full
 
 router = APIRouter(prefix="/api/voice", tags=["voice"])
 
