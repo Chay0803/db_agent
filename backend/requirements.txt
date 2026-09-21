@@ -1,0 +1,31 @@
+# ── Core Framework ──────────────────────────────────────────────────────────
+fastapi
+uvicorn[standard]
+sqlalchemy
+pydantic
+python-multipart
+aiofiles
+python-dotenv
+
+# ── Student AI Agent (existing) ─────────────────────────────────────────────
+groq
+google-genai
+
+# ── Voice module: async DB ──────────────────────────────────────────────────
+aiosqlite
+
+# ── Voice module: STT / TTS / RAG ───────────────────────────────────────────
+faster-whisper==1.2.0
+sentence-transformers==3.0.1
+faiss-cpu==1.9.0
+numpy==2.2.6
+edge-tts==7.2.8
+soundfile==0.13.1
+langdetect==1.0.9
+
+# ── Voice module: document ingestion for the RAG knowledge base ────────────
+pdfplumber==0.11.7
+python-docx==1.2.0
+
+# ── Voice module: optional richer emotion model (ENABLE_TRANSFORMER_EMOTION=true) ──
+transformers==4.41.2

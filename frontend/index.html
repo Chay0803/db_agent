@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StudentAI Platform</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+
+<!-- ── Sidebar ── -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">AI</div>
+    <div>
+      <div class="logo-title">StudentAI</div>
+      <div class="logo-sub">Agentic Database Platform</div>
+    </div>
+  </div>
+
+  <nav class="nav-section">
+    <div class="nav-label">Navigation</div>
+    <button class="nav-btn active" data-view="agent"    onclick="switchView('agent',this)">
+      <span class="nav-icon">◈</span> AI Agent
+    </button>
+    <button class="nav-btn" data-view="students"  onclick="switchView('students',this)">
+      <span class="nav-icon">▣</span> Students
+    </button>
+    <button class="nav-btn" data-view="analytics" onclick="switchView('analytics',this)">
+      <span class="nav-icon">▲</span> Analytics
+    </button>
+    <button class="nav-btn" data-view="ranking"   onclick="switchView('ranking',this)">
+      <span class="nav-icon">★</span> Rankings
+    </button>
+    <button class="nav-btn" data-view="atrisk"    onclick="switchView('atrisk',this)">
+      <span class="nav-icon">⚠</span> At-Risk
+    </button>
+    <button class="nav-btn" data-view="courses"   onclick="switchView('courses',this)">
+      <span class="nav-icon">◆</span> Courses
+    </button>
+  </nav>
+
+  
+
+  <div class="db-status">
+    <span class="status-dot"></span>
+    <span id="status-text">Connecting...</span>
+  </div>
+</aside>
+
+<!-- ── App shell ── -->
+<div class="app-shell">
+
+  <header class="topbar">
+    <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+    <div class="topbar-title" id="view-title">AI Agent</div>
+    <div class="topbar-actions">
+      <button class="icon-btn" onclick="refreshCurrentView()" title="Refresh">↻</button>
+    </div>
+  </header>
+
+  <main class="main-content">
+
+    <!-- ── AI Agent View ── -->
+    <section class="view active" id="view-agent">
+      <div class="agent-layout">
+
+        <div class="chat-container" id="chat-container">
+          <div class="chat-welcome">
+            <div class="welcome-icon">◈</div>
+            <h2>Student Database AI Agent</h2>
+            <p>Ask me anything about the student database in plain English. I can query, insert, update, and delete records — plus run analytics, detect at-risk students, generate reports, rank students, and write SQL.</p>
+          </div>
+        </div>
+
+        <div class="chat-input-area">
+          <div class="input-row">
+            <textarea
+              id="agent-input"
+              placeholder="Ask anything… e.g. 'Show all Computer Science students with GPA above 3.5'"
+              rows="1"
+              onkeydown="handleChatKey(event)"
+              oninput="autoResize(this)"
+            ></textarea>
+            <button class="send-btn mic-btn" id="mic-btn" title="Hold to speak"
+                    onmousedown="startRecording()" onmouseup="stopRecording()" onmouseleave="cancelIfRecording()"
+                    ontouchstart="startRecording(event)" ontouchend="stopRecording(event)">
+              <svg id="mic-icon" class="mic-icon-svg" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 15.5a3.5 3.5 0 0 0 3.5-3.5V7a3.5 3.5 0 1 0-7 0v5a3.5 3.5 0 0 0 3.5 3.5Zm-5-4.5a1 1 0 0 1 2 0v2a5 5 0 1 0 10 0v-2a1 1 0 1 1 2 0v2a7 7 0 0 1-6 6.92V21h2.5a1 1 0 1 1 0 2h-7a1 1 0 1 1 0-2H11v-2.08A7 7 0 0 1 5 13v-2Z" fill="currentColor"/>
+              </svg>
+            </button>
+            <button class="send-btn" id="send-btn" onclick="sendAgentMessage()">&#10148;</button>
+          </div>
+          <span class="mic-hint" id="mic-hint">Hold to speak</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── Students View ── -->
+    <section class="view" id="view-students">
+      <div class="view-header">
+        <h2>Students</h2>
+        <div class="view-actions">
+          <input type="text" id="student-search" placeholder="Search name or dept…" oninput="filterStudents()" />
+          <button class="btn-primary" onclick="openAddModal()">+ Add Student</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th><th>Name</th><th>Age</th><th>Department</th>
+              <th>GPA</th><th>Year</th><th>Status</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="students-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── Analytics View ── -->
+    <section class="view" id="view-analytics">
+      <div class="view-header"><h2>Analytics</h2></div>
+      <div class="metrics-grid" id="metrics-grid"></div>
+      <div class="analytics-grid">
+
+        <!-- Charts row -->
+        <div class="charts-row">
+          <div class="card chart-card">
+            <div class="card-title">GPA by Department</div>
+            <div class="chart-wrap"><canvas id="dept-chart"></canvas></div>
+          </div>
+          <div class="card chart-card chart-card--sm">
+            <div class="card-title">Student Status</div>
+            <div class="chart-wrap chart-wrap--donut"><canvas id="status-chart"></canvas></div>
+          </div>
+        </div>
+
+        <!-- Student count bar + table row -->
+        <div class="charts-row">
+          <div class="card chart-card">
+            <div class="card-title">Students per Department</div>
+            <div class="chart-wrap"><canvas id="gpa-dist-chart"></canvas></div>
+          </div>
+          <div class="card">
+            <div class="card-title">Department Statistics</div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead><tr><th>Department</th><th>Students</th><th>Avg GPA</th><th>Max GPA</th><th>Min GPA</th></tr></thead>
+                <tbody id="dept-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── Ranking View ── -->
+    <section class="view" id="view-ranking">
+      <div class="view-header"><h2>GPA Rankings</h2></div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Rank</th><th>Name</th><th>Department</th><th>GPA</th><th></th></tr></thead>
+          <tbody id="ranking-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── At-Risk View ── -->
+    <section class="view" id="view-atrisk">
+      <div class="view-header"><h2>At-Risk Students</h2></div>
+      <div id="atrisk-container"></div>
+    </section>
+
+    <!-- ── Courses View ── -->
+    <section class="view" id="view-courses">
+      <div class="view-header"><h2>Courses</h2></div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>ID</th><th>Course Name</th><th>Department</th><th>Credits</th></tr></thead>
+          <tbody id="courses-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ── Add / Edit Modal ── -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <h3 id="modal-title">Add Student</h3>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="edit-id" />
+      <div class="form-row">
+        <label>Full Name</label>
+        <input type="text" id="f-name" placeholder="e.g. Aisha Patel" />
+      </div>
+      <div class="form-row two-col">
+        <div>
+          <label>Age</label>
+          <input type="number" id="f-age" min="16" max="60" placeholder="21" />
+        </div>
+        <div>
+          <label>GPA</label>
+          <input type="number" id="f-gpa" step="0.1" min="0" max="4" placeholder="3.5" />
+        </div>
+      </div>
+      <div class="form-row">
+        <label>Department</label>
+        <select id="f-department">
+          <option>Computer Science</option>
+          <option>Data Science</option>
+          <option>Electrical Engineering</option>
+          <option>Mechanical Engineering</option>
+          <option>Civil Engineering</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>Email</label>
+        <input type="email" id="f-email" placeholder="student@uni.edu" />
+      </div>
+      <div class="form-row two-col">
+        <div>
+          <label>Enrollment Year</label>
+          <input type="number" id="f-year" placeholder="2024" />
+        </div>
+        <div>
+          <label>Status</label>
+          <select id="f-status">
+            <option value="active">Active</option>
+            <option value="probation">Probation</option>
+            <option value="graduated">Graduated</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+      <button class="btn-primary" id="modal-save-btn" onclick="saveStudent()">Save Student</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="/static/js/app.js"></script>
+</body>
+</html>

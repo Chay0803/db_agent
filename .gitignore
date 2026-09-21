@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.so
+
+# Virtual environments
+venv/
+.env/
+.venv/
+ENV/
+env/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Python package artifacts
+*.egg-info/
+.eggs/
+dist/
+build/
+*.whl
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Local data
+*.sqlite3
+*.db
+backend/data/
+backend/voice/data/
