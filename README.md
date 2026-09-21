@@ -2,7 +2,6 @@
 title: StudentAI Platform
 emoji: 🤖
 colorFrom: blue
-title: StudentAI Platform
 colorTo: purple
 sdk: docker
 app_file: Dockerfile
