@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
-from models import Student, Course, Enrollment
+
+from .models import Student, Course, Enrollment
 
 STUDENTS = [
     {"name": "Aisha Patel",     "age": 21, "department": "Computer Science",       "gpa": 3.9, "email": "aisha.patel@uni.edu",     "enrollment_year": 2022, "status": "active"},

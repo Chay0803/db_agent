@@ -1,8 +1,9 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import func
-from models import Student, Course, Enrollment
-from schemas import StudentCreate, StudentUpdate
 from typing import Optional
+
+from .models import Student, Course, Enrollment
+from .schemas import StudentCreate, StudentUpdate
 
 
 # ── Students ──────────────────────────────────────────────────────────────────
